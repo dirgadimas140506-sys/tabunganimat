@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>saku. - Aplikasi Tabungan</title>
+    <title>saku. - Tabungan Pribadi</title>
     
-    <!-- Import Font dari Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Import Ikon dari FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- KONFIGURASI WARNA & VARIABEL --- */
         :root {
             --primary: #1E3A2F;
             --accent: #C9F27A;
@@ -24,315 +21,221 @@
             --danger: #EF4444;
         }
 
-        /* --- RESET & BASE STYLE --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            background-color: #e5e5e5; /* Background luar untuk desktop */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
+        body { background-color: #e5e5e5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
-        /* Container HP (Mobile App Wrapper) */
         .app-container {
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            max-height: 850px;
-            background-color: var(--bg);
-            position: relative;
-            overflow-y: auto;
-            overflow-x: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border-radius: 20px; /* Jika dibuka di desktop */
+            width: 100%; max-width: 400px; height: 100vh; max-height: 850px;
+            background-color: var(--bg); position: relative; overflow-y: auto; overflow-x: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-radius: 20px;
         }
-
-        /* Sembunyikan scrollbar */
         .app-container::-webkit-scrollbar { display: none; }
 
-        /* --- LAYAR (SCREENS) --- */
-        .screen {
-            display: none;
-            padding: 24px 20px 100px 20px;
-            animation: fadeIn 0.3s ease;
-        }
+        .screen { display: none; padding: 24px 20px 100px 20px; animation: fadeIn 0.3s ease; }
         .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- HEADER --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            margin-top: 10px;
-        }
+        /* --- Header --- */
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; margin-top: 10px; }
         .logo { font-size: 28px; font-weight: 800; color: var(--primary); }
         .subtitle { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-        .icon-btn {
-            width: 40px; height: 40px;
-            border-radius: 50%;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            display: flex; justify-content: center; align-items: center;
-            font-size: 18px; color: var(--text-main);
-            cursor: pointer;
+        
+        /* --- Card Saldo --- */
+        .balance-card { background-color: var(--primary); border-radius: 20px; padding: 20px; color: white; margin-bottom: 24px; }
+        .balance-header { display: flex; justify-content: space-between; align-items: center; color: #D1D5DB; font-size: 14px; }
+        .balance-header i { cursor: pointer; padding: 5px; }
+        .balance-amount { font-size: 32px; font-weight: 700; margin: 8px 0 16px 0; }
+        
+        .action-buttons { display: flex; gap: 10px; }
+        .btn-accent, .btn-outline {
+            flex: 1; padding: 14px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700;
+            display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
         }
+        .btn-accent { background-color: var(--accent); color: var(--primary); }
+        .btn-outline { background-color: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); }
 
-        /* --- KARTU SALDO (BALANCE CARD) --- */
-        .balance-card {
-            background-color: var(--primary);
-            border-radius: 20px;
-            padding: 20px;
-            color: white;
-            margin-bottom: 24px;
-        }
-        .balance-header {
-            display: flex; justify-content: space-between; align-items: center;
-            color: #D1D5DB; font-size: 14px;
-        }
-        .balance-amount {
-            font-size: 32px; font-weight: 700;
-            margin: 8px 0 12px 0;
-        }
-        .pill {
-            background-color: rgba(255,255,255,0.1);
-            color: var(--accent);
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 20px;
-        }
-        .btn-accent {
-            background-color: var(--accent);
-            color: var(--primary);
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            font-size: 15px;
-            font-weight: 700;
-            display: flex; justify-content: center; align-items: center; gap: 8px;
-            cursor: pointer;
-        }
-
-        /* --- SECTION & CARDS --- */
-        .section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 12px;
-        }
+        /* --- List Transaksi --- */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 10px; }
         .section-title { font-size: 15px; font-weight: 700; color: var(--text-main); }
-        .link-text { font-size: 13px; color: var(--text-muted); font-weight: 600; cursor: pointer; }
-
-        .card {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 24px;
-            border: 1px solid var(--border);
+        
+        .trx-item {
+            display: flex; align-items: center; background: var(--surface);
+            padding: 12px; border-radius: 12px; margin-bottom: 8px; cursor: pointer;
+            border: 1px solid var(--border); transition: transform 0.1s;
         }
-        .card-row { display: flex; align-items: center; margin-bottom: 16px; }
-        .icon-box {
-            width: 40px; height: 40px;
-            border-radius: 12px;
-            background: #F3F4F6;
-            display: flex; justify-content: center; align-items: center;
-            color: var(--primary); font-size: 18px;
-        }
+        .trx-item:active { transform: scale(0.98); }
+        .icon-box { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .trx-icon-in { background: var(--accent); color: var(--primary); }
+        .trx-icon-out { background: #FEE2E2; color: var(--danger); }
         .card-text { flex: 1; margin-left: 12px; }
         .card-title { font-size: 14px; font-weight: 600; color: var(--text-main); }
         .card-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-        .progress-text { font-size: 16px; font-weight: 700; }
-        .progress-text span { font-size: 12px; font-weight: 400; color: var(--text-muted); }
-        .progress-bar-bg {
-            height: 8px; background: var(--border);
-            border-radius: 4px; margin-top: 8px; overflow: hidden;
-        }
-        .progress-bar-fill {
-            height: 100%; background: var(--primary); width: 75%; border-radius: 4px;
-        }
-
-        /* --- LIST AKTIVITAS --- */
-        .trx-item {
-            display: flex; align-items: center;
-            background: var(--surface);
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            border: 1px solid var(--border);
-            transition: transform 0.1s;
-        }
-        .trx-item:active { transform: scale(0.98); }
-        .trx-icon-in { background: var(--accent); color: var(--primary); }
-        .trx-icon-out { background: #FEE2E2; color: var(--danger); }
         .trx-amount { font-size: 14px; font-weight: 700; }
         .text-success { color: var(--success); }
         .text-danger { color: var(--danger); }
 
-        /* --- BOTTOM NAVIGATION --- */
+        .empty-state { text-align: center; padding: 30px 0; color: var(--text-muted); font-size: 14px; }
+
+        /* --- Bottom Nav --- */
         .bottom-nav {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: var(--surface);
-            border-top: 1px solid var(--border);
-            display: flex; justify-content: space-around;
-            padding: 12px 0 20px 0;
-            border-radius: 0 0 20px 20px;
+            position: absolute; bottom: 0; left: 0; right: 0; background: var(--surface);
+            border-top: 1px solid var(--border); display: flex; justify-content: space-around;
+            padding: 12px 0 20px 0; border-radius: 0 0 20px 20px; z-index: 99;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            font-size: 11px; color: var(--text-muted); gap: 4px; cursor: pointer;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); gap: 4px; cursor: pointer; }
         .nav-item.active { color: var(--primary); font-weight: 700; }
         .nav-item i { font-size: 20px; }
 
-        /* --- LAYAR BUKTI TRANSAKSI (RECEIPT) --- */
-        .back-btn {
-            width: 40px; height: 40px;
-            background: var(--surface); border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            border: 1px solid var(--border);
-            font-size: 18px; cursor: pointer; margin-bottom: 20px;
-        }
-        .receipt-header { text-align: center; margin-bottom: 30px; }
-        .status-icon {
-            width: 80px; height: 80px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 40px; margin: 0 auto 16px auto;
-        }
+        /* --- Modal Form --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: flex-end; z-index: 1000; }
+        .modal-overlay.active { display: flex; }
+        .modal-content { background: var(--surface); width: 100%; max-width: 400px; border-radius: 24px 24px 0 0; padding: 24px; animation: slideUp 0.3s ease; max-height: 90vh; overflow-y: auto;}
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        
+        .input-group { margin-bottom: 16px; }
+        .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+        .input-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); font-size: 16px; font-family: inherit; outline: none; }
+        .input-control:focus { border-color: var(--primary); }
+
+        /* --- Receipt --- */
+        .back-btn { width: 40px; height: 40px; background: var(--surface); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); font-size: 18px; cursor: pointer; margin-bottom: 20px; }
+        .receipt-header { text-align: center; margin-bottom: 20px; }
+        .status-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 40px; margin: 0 auto 16px auto; }
         .status-in { background: var(--accent); color: var(--primary); }
         .status-out { background: #FEE2E2; color: var(--danger); }
         .receipt-amount { font-size: 32px; font-weight: 800; margin: 4px 0; }
         
-        .detail-row {
-            display: flex; justify-content: space-between;
-            padding: 12px 0; border-bottom: 1px solid var(--border);
-            font-size: 14px;
-        }
+        .card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 24px; border: 1px solid var(--border); }
+        .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
         .detail-row:last-child { border-bottom: none; }
         .detail-label { color: var(--text-muted); }
         .detail-value { font-weight: 600; text-align: right; max-width: 60%; }
 
-        .photo-box {
-            width: 100%; height: 200px;
-            border-radius: 16px; overflow: hidden;
-            border: 1px solid var(--border);
-            background: #E5E7EB;
-            margin-bottom: 24px;
-            display: flex; justify-content: center; align-items: center;
-            color: var(--text-muted);
-        }
-        .photo-box img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
-        .btn-primary {
-            width: 100%; padding: 16px;
-            background: var(--primary); color: white;
-            border: none; border-radius: 12px;
-            font-size: 15px; font-weight: 600; cursor: pointer;
-        }
+        .photo-box { width: 100%; height: auto; min-height: 150px; border-radius: 16px; overflow: hidden; border: 1px dashed var(--primary); background: #E5E7EB; margin-bottom: 24px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); flex-direction: column; padding: 20px; text-align: center;}
+        .photo-box img { width: 100%; border-radius: 8px; object-fit: contain; max-height: 300px; }
+        
+        /* --- Target Styles --- */
+        .target-card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
+        .target-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .target-icon { width: 40px; height: 40px; border-radius: 50%; background: #F3F4F6; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px;}
+        .progress-bg { height: 8px; background: var(--border); border-radius: 4px; margin: 10px 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; }
+        
+        /* --- Profile Styles --- */
+        .profile-header { text-align: center; margin-bottom: 30px; }
+        .avatar { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px auto; font-size: 32px; color: var(--primary); }
+        .profile-menu { background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+        .profile-item { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
+        .profile-item:last-child { border-bottom: none; }
+        .profile-item:active { background: #F3F4F6; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         
-        <!-- ================= LAYAR 1: BERANDA ================= -->
+        <!-- ================= 1. LAYAR BERANDA ================= -->
         <div id="screen-home" class="screen active">
-            
             <div class="header">
                 <div>
                     <div class="logo">saku.</div>
-                    <div class="subtitle">Langkah kecil, mimpi besar.</div>
+                    <div class="subtitle">Mulai dari 0, capai mimpimu.</div>
                 </div>
-                <div class="icon-btn"><i class="fa-regular fa-bell"></i></div>
             </div>
 
-            <!-- Kartu Saldo -->
             <div class="balance-card">
                 <div class="balance-header">
-                    <span>Total tabunganmu</span>
-                    <i class="fa-regular fa-eye"></i>
+                    <span>Saldo Tersedia</span>
+                    <i id="toggle-balance-btn" class="fa-regular fa-eye" onclick="toggleBalance()"></i>
                 </div>
-                <div class="balance-amount">Rp12.500.000</div>
-                <div class="pill"><i class="fa-solid fa-arrow-trend-up"></i> +Rp1.500.000 bulan ini</div>
-                <button class="btn-accent">
-                    <i class="fa-solid fa-plus"></i> Tambah tabungan
-                </button>
-            </div>
-
-            <!-- Target Tabungan -->
-            <div class="section-header">
-                <div class="section-title">Mimpimu, satu per satu</div>
-                <div class="link-text">Lihat semua</div>
-            </div>
-            <div class="card">
-                <div class="card-row">
-                    <div class="icon-box"><i class="fa-solid fa-plane"></i></div>
-                    <div class="card-text">
-                        <div class="card-title">Liburan ke Bali</div>
-                        <div class="card-sub">Desember 2026</div>
-                    </div>
-                    <i class="fa-solid fa-chevron-right" style="color: var(--text-muted);"></i>
-                </div>
-                <div class="progress-text">Rp4.500.000 <span>/ Rp6.000.000</span></div>
-                <div class="progress-bar-bg">
-                    <div class="progress-bar-fill"></div>
+                <div id="total-balance" class="balance-amount">Rp0</div>
+                
+                <div class="action-buttons">
+                    <button class="btn-accent" onclick="openModal('in')">
+                        <i class="fa-solid fa-plus"></i> Dana Masuk
+                    </button>
+                    <button class="btn-outline" onclick="openModal('out')">
+                        <i class="fa-solid fa-minus"></i> Pengeluaran
+                    </button>
                 </div>
             </div>
 
-            <!-- Aktivitas Terbaru -->
             <div class="section-header">
-                <div class="section-title">Aktivitas terbaru</div>
-                <div class="link-text">Lihat semua</div>
+                <div class="section-title">Riwayat Transaksi</div>
             </div>
             
-            <!-- List Transaksi (Bisa diklik) -->
-            <div class="trx-item" onclick="openReceipt('in', 'Liburan ke Bali', 'Rp500.000', 'Hari ini • Transfer bank')">
-                <div class="icon-box trx-icon-in"><i class="fa-solid fa-arrow-down"></i></div>
-                <div class="card-text">
-                    <div class="card-title">Liburan ke Bali</div>
-                    <div class="card-sub">Hari ini • Transfer bank</div>
-                </div>
-                <div class="trx-amount text-success">+Rp500.000</div>
-            </div>
-
-            <div class="trx-item" onclick="openReceipt('out', 'Dana darurat', 'Rp1.000.000', '10 Nov • Transfer bank')">
-                <div class="icon-box trx-icon-out"><i class="fa-solid fa-arrow-up"></i></div>
-                <div class="card-text">
-                    <div class="card-title">Dana darurat</div>
-                    <div class="card-sub">10 Nov • Transfer bank</div>
-                </div>
-                <div class="trx-amount text-danger">-Rp1.000.000</div>
-            </div>
-
-            <!-- Bottom Nav -->
-            <div class="bottom-nav">
-                <div class="nav-item active"><i class="fa-solid fa-house"></i>Beranda</div>
-                <div class="nav-item"><i class="fa-solid fa-bullseye"></i>Target</div>
-                <div class="nav-item"><i class="fa-solid fa-chart-pie"></i>Statistik</div>
-                <div class="nav-item"><i class="fa-regular fa-user"></i>Profil</div>
+            <div id="transaction-list">
+                <!-- Diisi oleh JS -->
             </div>
         </div>
 
-        <!-- ================= LAYAR 2: BUKTI TRANSAKSI ================= -->
-        <div id="screen-receipt" class="screen">
+        <!-- ================= 2. LAYAR TARGET ================= -->
+        <div id="screen-target" class="screen">
+            <div class="header">
+                <div class="logo">Target.</div>
+                <button class="btn-accent" style="flex:none; padding: 8px 12px; font-size:12px;" onclick="openTargetModal()">+ Target Baru</button>
+            </div>
             
-            <div class="back-btn" onclick="showHome()">
+            <div id="target-list">
+                <!-- Diisi oleh JS -->
+            </div>
+        </div>
+
+        <!-- ================= 3. LAYAR STATISTIK ================= -->
+        <div id="screen-stats" class="screen">
+            <div class="header"><div class="logo">Statistik.</div></div>
+            
+            <div class="card" style="border-left: 4px solid var(--success); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Total Dana Masuk</div>
+                    <div id="stat-in" style="font-size: 20px; font-weight: 700; color: var(--success);">Rp0</div>
+                </div>
+                <i class="fa-solid fa-arrow-down" style="color: var(--success); font-size: 24px;"></i>
+            </div>
+
+            <div class="card" style="border-left: 4px solid var(--danger); display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 13px; color: var(--text-muted);">Total Pengeluaran</div>
+                    <div id="stat-out" style="font-size: 20px; font-weight: 700; color: var(--danger);">Rp0</div>
+                </div>
+                <i class="fa-solid fa-arrow-up" style="color: var(--danger); font-size: 24px;"></i>
+            </div>
+
+            <div class="card" style="background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 13px; color: #D1D5DB;">Sisa Saldo Akhir</div>
+                    <div id="stat-balance" style="font-size: 24px; font-weight: 800;">Rp0</div>
+                </div>
+                <i class="fa-solid fa-wallet" style="font-size: 24px; opacity: 0.5;"></i>
+            </div>
+        </div>
+
+        <!-- ================= 4. LAYAR PROFIL ================= -->
+        <div id="screen-profile" class="screen">
+            <div class="header"><div class="logo">Profil.</div></div>
+            
+            <div class="profile-header">
+                <div class="avatar">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3 id="profile-name">Pengguna saku.</h3>
+                <p id="profile-email" style="font-size: 13px; color: var(--text-muted);">pengguna@email.com</p>
+            </div>
+
+            <div class="profile-menu">
+                <div class="profile-item" onclick="editProfile()">
+                    <i class="fa-solid fa-user-pen" style="color: var(--primary);"></i> Ubah Profil
+                </div>
+                <div class="profile-item" onclick="resetData()" style="color: var(--danger);">
+                    <i class="fa-solid fa-trash"></i> Hapus Semua Data (Mulai dari 0)
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 5. LAYAR BUKTI TRANSAKSI ================= -->
+        <div id="screen-receipt" class="screen">
+            <div class="back-btn" onclick="showScreen('home')">
                 <i class="fa-solid fa-arrow-left"></i>
             </div>
 
@@ -340,83 +243,466 @@
                 <div id="receipt-icon" class="status-icon status-in">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <div id="receipt-status-text" style="color: var(--text-muted); font-size: 15px; margin-bottom: 8px;">Tabungan Berhasil</div>
-                <div id="receipt-amount-display" class="receipt-amount">Rp500.000</div>
-                <div id="receipt-date-display" style="color: var(--text-muted); font-size: 13px;">Hari ini • Transfer bank</div>
+                <h3 id="receipt-proof-type" style="color: var(--primary); margin-bottom: 8px;">BUKTI DANA MASUK</h3>
+                <div id="receipt-amount-display" class="receipt-amount">Rp0</div>
+                <div id="receipt-date-display" style="color: var(--text-muted); font-size: 13px;">-</div>
             </div>
 
-            <div class="card">
+            <div class="card" style="border: 2px solid var(--border);">
+                <div style="text-align: center; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px dashed var(--border);">
+                    <div style="font-weight: 800; font-size: 18px; color: var(--primary);">saku.</div>
+                    <div style="font-size: 11px; color: var(--text-muted);">Bukti Transaksi Sah</div>
+                </div>
                 <div class="detail-row">
-                    <div class="detail-label">Jenis Transaksi</div>
-                    <div id="receipt-type" class="detail-value">Menabung</div>
+                    <div class="detail-label">Status</div>
+                    <div id="receipt-status" class="detail-value text-success">BERHASIL</div>
                 </div>
                 <div class="detail-row">
                     <div class="detail-label">Keterangan</div>
-                    <div id="receipt-title" class="detail-value">Liburan ke Bali</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Sumber Dana</div>
-                    <div class="detail-value">Bank BCA **** 4821</div>
+                    <div id="receipt-title" class="detail-value">-</div>
                 </div>
                 <div class="detail-row">
                     <div class="detail-label">ID Transaksi</div>
-                    <div class="detail-value">TRX-20261112-001</div>
+                    <div id="receipt-id" class="detail-value" style="font-family: monospace;">-</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Waktu</div>
+                    <div id="receipt-time" class="detail-value">-</div>
                 </div>
             </div>
 
-            <div class="section-title" style="margin-bottom: 12px;">Foto Bukti Transfer</div>
-            <!-- Foto Bukti (Menggunakan gambar placeholder dari Unsplash) -->
-            <div class="photo-box">
-                <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=600&q=80" alt="Bukti Transfer">
-            </div>
+            <h4 style="margin-bottom: 12px; font-size: 14px;">Lampiran Foto Bukti</h4>
+            <div id="receipt-photo-container" class="photo-box"></div>
 
-            <button class="btn-primary" onclick="showHome()">Kembali ke Beranda</button>
+            <button class="btn-accent" style="width: 100%; padding: 16px;" onclick="showScreen('home')">Selesai</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="bottom-nav">
+            <div class="nav-item active" id="nav-home" onclick="showScreen('home')"><i class="fa-solid fa-house"></i>Beranda</div>
+            <div class="nav-item" id="nav-target" onclick="showScreen('target')"><i class="fa-solid fa-bullseye"></i>Target</div>
+            <div class="nav-item" id="nav-stats" onclick="showScreen('stats')"><i class="fa-solid fa-chart-pie"></i>Statistik</div>
+            <div class="nav-item" id="nav-profile" onclick="showScreen('profile')"><i class="fa-regular fa-user"></i>Profil</div>
         </div>
 
     </div>
 
-    <!-- JAVASCRIPT UNTUK NAVIGASI & DATA DINAMIS -->
+    <!-- MODAL: TRANSAKSI (MASUK/KELUAR) -->
+    <div id="modal-form" class="modal-overlay" onclick="closeModal('modal-form', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 id="modal-title" style="margin-bottom: 20px; color: var(--primary);">Tambah Dana</h3>
+            
+            <div class="input-group">
+                <label>Nominal (Rp)</label>
+                <input type="number" id="input-amount" class="input-control" placeholder="Contoh: 50000" min="1">
+            </div>
+            
+            <div class="input-group">
+                <label>Keterangan</label>
+                <input type="text" id="input-desc" class="input-control" placeholder="Contoh: Nabung mingguan">
+            </div>
+
+            <div class="input-group">
+                <label>Upload Bukti Transfer (Opsional)</label>
+                <input type="file" id="input-image" class="input-control" accept="image/*" onchange="previewImage(event)" style="padding: 10px;">
+                <div id="image-preview" style="margin-top: 10px; display: none;">
+                    <img id="preview-img" src="" style="width: 100%; max-height: 150px; object-fit: contain; border-radius: 8px;">
+                </div>
+            </div>
+
+            <button id="btn-save" class="btn-accent" style="width: 100%; padding: 16px; margin-top: 10px;" onclick="saveTransaction()">Simpan</button>
+            <button class="btn-outline" style="width: 100%; padding: 16px; margin-top: 10px; color: var(--text-main); border-color: var(--border);" onclick="closeModal('modal-form')">Batal</button>
+        </div>
+    </div>
+
+    <!-- MODAL: BUAT TARGET BARU -->
+    <div id="modal-target" class="modal-overlay" onclick="closeModal('modal-target', event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3 style="margin-bottom: 20px; color: var(--primary);">Buat Target Baru</h3>
+            <div class="input-group">
+                <label>Nama Target (Impian)</label>
+                <input type="text" id="target-name" class="input-control" placeholder="Contoh: Beli Laptop">
+            </div>
+            <div class="input-group">
+                <label>Target Nominal (Rp)</label>
+                <input type="number" id="target-amount" class="input-control" placeholder="Contoh: 10000000" min="1">
+            </div>
+            <button class="btn-accent" style="width: 100%; padding: 16px;" onclick="saveTarget()">Buat Target</button>
+            <button class="btn-outline" style="width: 100%; padding: 16px; margin-top: 10px; color: var(--text-main); border-color: var(--border);" onclick="closeModal('modal-target')">Batal</button>
+        </div>
+    </div>
+
     <script>
-        function openReceipt(type, title, amount, date) {
-            // Sembunyikan Home, Tampilkan Receipt
-            document.getElementById('screen-home').classList.remove('active');
-            document.getElementById('screen-receipt').classList.add('active');
+        // --- 1. INISIALISASI DATA (MULAI DARI 0) ---
+        let appData = JSON.parse(localStorage.getItem('sakuData'));
+        
+        // Jika belum ada data sama sekali, set default mulai dari 0
+        if (!appData || !appData.transactions) {
+            appData = {
+                balance: 0,
+                transactions: [],
+                targets: [],
+                profile: { name: "Pengguna saku.", email: "pengguna@email.com" }
+            };
+        }
 
-            // Isi Data Dinamis
-            document.getElementById('receipt-title').innerText = title;
-            document.getElementById('receipt-amount-display').innerText = amount;
-            document.getElementById('receipt-date-display').innerText = date;
+        let currentType = 'in'; 
+        let isBalanceVisible = true;
+        let uploadedImageBase64 = null;
 
-            const iconBox = document.getElementById('receipt-icon');
-            const statusText = document.getElementById('receipt-status-text');
-            const typeText = document.getElementById('receipt-type');
+        // --- 2. FORMAT RUPIAH ---
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+        }
 
-            if (type === 'in') {
-                // Desain untuk Tabungan Masuk
-                iconBox.className = 'status-icon status-in';
-                iconBox.innerHTML = '<i class="fa-solid fa-check"></i>';
-                statusText.innerText = 'Tabungan Berhasil';
-                statusText.style.color = 'var(--text-muted)';
-                document.getElementById('receipt-amount-display').style.color = 'var(--text-main)';
-                typeText.innerText = 'Menabung';
+        // --- 3. NAVIGASI ---
+        function showScreen(screenName) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('screen-' + screenName).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if(document.getElementById('nav-' + screenName)) {
+                document.getElementById('nav-' + screenName).classList.add('active');
+            }
+
+            document.querySelector('.app-container').scrollTop = 0;
+            
+            // Render ulang data saat pindah tab
+            if(screenName === 'stats') renderStats();
+            if(screenName === 'target') renderTargets();
+            if(screenName === 'profile') renderProfile();
+        }
+
+        function toggleBalance() {
+            isBalanceVisible = !isBalanceVisible;
+            const balEl = document.getElementById('total-balance');
+            const iconEl = document.getElementById('toggle-balance-btn');
+            
+            if (isBalanceVisible) {
+                balEl.innerText = formatRupiah(appData.balance);
+                iconEl.className = 'fa-regular fa-eye';
             } else {
-                // Desain untuk Pengeluaran
-                iconBox.className = 'status-icon status-out';
-                iconBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
-                statusText.innerText = 'Pengeluaran Berhasil';
-                statusText.style.color = 'var(--text-muted)';
-                document.getElementById('receipt-amount-display').style.color = 'var(--text-main)';
-                typeText.innerText = 'Penarikan / Pengeluaran';
+                balEl.innerText = 'Rp ••••••••';
+                iconEl.className = 'fa-regular fa-eye-slash';
             }
         }
 
-        function showHome() {
-            // Sembunyikan Receipt, Tampilkan Home
-            document.getElementById('screen-receipt').classList.remove('active');
-            document.getElementById('screen-home').classList.add('active');
-            // Scroll ke atas
-            document.querySelector('.app-container').scrollTop = 0;
+        // --- 4. RENDER BERANDA ---
+        function renderApp() {
+            if(isBalanceVisible) document.getElementById('total-balance').innerText = formatRupiah(appData.balance);
+
+            const listContainer = document.getElementById('transaction-list');
+            listContainer.innerHTML = ''; 
+
+            if (appData.transactions.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">Belum ada transaksi.<br>Mulai dari 0 dan nabung sekarang!</div>';
+                return;
+            }
+
+            appData.transactions.slice().reverse().forEach(trx => {
+                const isIncome = trx.type === 'in';
+                const iconClass = isIncome ? 'trx-icon-in' : 'trx-icon-out';
+                const iconFa = isIncome ? 'fa-arrow-down' : 'fa-arrow-up';
+                const amountColor = isIncome ? 'text-success' : 'text-danger';
+                const sign = isIncome ? '+' : '-';
+
+                listContainer.innerHTML += `
+                    <div class="trx-item" onclick="openReceipt('${trx.id}')">
+                        <div class="icon-box ${iconClass}"><i class="fa-solid ${iconFa}"></i></div>
+                        <div class="card-text">
+                            <div class="card-title">${trx.desc}</div>
+                            <div class="card-sub">${trx.date}</div>
+                        </div>
+                        <div class="trx-amount ${amountColor}">${sign}${formatRupiah(trx.amount)}</div>
+                    </div>
+                `;
+            });
         }
+
+        // --- 5. RENDER STATISTIK ---
+        function renderStats() {
+            let totalIn = 0;
+            let totalOut = 0;
+            appData.transactions.forEach(t => {
+                if(t.type === 'in') totalIn += t.amount;
+                else totalOut += t.amount;
+            });
+
+            document.getElementById('stat-in').innerText = formatRupiah(totalIn);
+            document.getElementById('stat-out').innerText = formatRupiah(totalOut);
+            document.getElementById('stat-balance').innerText = formatRupiah(appData.balance);
+        }
+
+        // --- 6. RENDER TARGET ---
+        function renderTargets() {
+            const container = document.getElementById('target-list');
+            container.innerHTML = '';
+
+            if(appData.targets.length === 0) {
+                container.innerHTML = '<div class="empty-state">Belum ada target.<br>Klik "+ Target Baru" untuk memulai mimpimu!</div>';
+                return;
+            }
+
+            appData.targets.forEach((t, index) => {
+                const percent = Math.min((t.collected / t.target) * 100, 100);
+                const isDone = t.collected >= t.target;
+                
+                container.innerHTML += `
+                    <div class="target-card">
+                        <div class="target-header">
+                            <div style="display:flex; align-items:center; gap: 12px;">
+                                <div class="target-icon"><i class="fa-solid fa-bullseye"></i></div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 15px;">${t.name}</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);">${isDone ? 'Target Tercapai! 🎉' : 'Sedang berjalan'}</div>
+                                </div>
+                            </div>
+                            ${!isDone ? `<button style="background:var(--accent); border:none; padding: 6px 10px; border-radius:8px; font-weight:700; cursor:pointer;" onclick="addToTarget(${index})">+ Nabung</button>` : ''}
+                        </div>
+                        
+                        <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-top:12px;">
+                            <span>${formatRupiah(t.collected)}</span>
+                            <span style="color:var(--text-muted);">dari ${formatRupiah(t.target)}</span>
+                        </div>
+                        
+                        <div class="progress-bg">
+                            <div class="progress-fill" style="width: ${percent}%"></div>
+                        </div>
+                        <div style="text-align:right; font-size:11px; font-weight:700; color:var(--primary);">${percent.toFixed(1)}%</div>
+                    </div>
+                `;
+            });
+        }
+
+        function openTargetModal() {
+            document.getElementById('modal-target').classList.add('active');
+            document.getElementById('target-name').value = '';
+            document.getElementById('target-amount').value = '';
+        }
+
+        function saveTarget() {
+            const name = document.getElementById('target-name').value;
+            const amount = parseFloat(document.getElementById('target-amount').value);
+
+            if(!name || !amount || amount <= 0) {
+                alert('Harap isi nama target dan nominal yang valid!');
+                return;
+            }
+
+            appData.targets.push({ name: name, target: amount, collected: 0 });
+            saveData();
+            closeModal('modal-target');
+            renderTargets();
+        }
+
+        function addToTarget(index) {
+            const trg = appData.targets[index];
+            const sisaTarget = trg.target - trg.collected;
+            
+            let input = prompt(`Masukkan nominal yang ingin ditabung ke "${trg.name}".\nSisa target: ${formatRupiah(sisaTarget)}\nSaldo Utama Anda: ${formatRupiah(appData.balance)}`);
+            
+            if(input === null) return; // Batal
+            let amount = parseFloat(input);
+
+            if(isNaN(amount) || amount <= 0) {
+                alert('Nominal tidak valid!');
+                return;
+            }
+            if(amount > appData.balance) {
+                alert('Saldo Utama Anda tidak cukup! Silakan tambah Dana Masuk terlebih dahulu di Beranda.');
+                return;
+            }
+            if(amount > sisaTarget) {
+                alert('Nominal melebihi sisa target!');
+                return;
+            }
+
+            // Potong saldo utama, tambah ke target
+            appData.balance -= amount;
+            trg.collected += amount;
+
+            // Catat sebagai transaksi pengeluaran (uang pindah ke target)
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' • ' + now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+            
+            appData.transactions.push({
+                id: 'TRX-' + Date.now(),
+                type: 'out',
+                amount: amount,
+                desc: `Nabung Target: ${trg.name}`,
+                date: dateStr,
+                image: null
+            });
+
+            saveData();
+            renderTargets();
+            renderApp();
+            alert('Berhasil menabung ke target!');
+        }
+
+        // --- 7. RENDER PROFIL ---
+        function renderProfile() {
+            document.getElementById('profile-name').innerText = appData.profile.name;
+            document.getElementById('profile-email').innerText = appData.profile.email;
+        }
+
+        function editProfile() {
+            let newName = prompt('Masukkan Nama Baru:', appData.profile.name);
+            if(newName) {
+                let newEmail = prompt('Masukkan Email Baru:', appData.profile.email);
+                if(newEmail) {
+                    appData.profile.name = newName;
+                    appData.profile.email = newEmail;
+                    saveData();
+                    renderProfile();
+                }
+            }
+        }
+
+        function resetData() {
+            if (confirm('PERINGATAN: Apakah kamu yakin ingin menghapus SEMUA data (Saldo, Riwayat, Target) dan mulai dari 0?')) {
+                appData = {
+                    balance: 0,
+                    transactions: [],
+                    targets: [],
+                    profile: { name: "Pengguna saku.", email: "pengguna@email.com" }
+                };
+                localStorage.removeItem('sakuData');
+                renderApp();
+                renderTargets();
+                renderProfile();
+                showScreen('home');
+            }
+        }
+
+        // --- 8. MODAL TRANSAKSI & UPLOAD ---
+        function openModal(type) {
+            currentType = type;
+            uploadedImageBase64 = null; 
+            document.getElementById('modal-form').classList.add('active');
+            document.getElementById('modal-title').innerText = type === 'in' ? 'Tambah Dana Masuk' : 'Catat Pengeluaran';
+            document.getElementById('input-amount').value = '';
+            document.getElementById('input-desc').value = '';
+            document.getElementById('input-image').value = '';
+            document.getElementById('image-preview').style.display = 'none';
+        }
+
+        function closeModal(modalId, event) {
+            if(event && event.target !== event.currentTarget) return; 
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImageBase64 = e.target.result;
+                    document.getElementById('preview-img').src = uploadedImageBase64;
+                    document.getElementById('image-preview').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function saveTransaction() {
+            const amountInput = document.getElementById('input-amount').value;
+            const descInput = document.getElementById('input-desc').value;
+
+            if (!amountInput || amountInput <= 0) {
+                alert('Masukkan nominal yang valid!');
+                return;
+            }
+
+            const amount = parseFloat(amountInput);
+            const desc = descInput || (currentType === 'in' ? 'Dana Masuk' : 'Pengeluaran');
+            
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' • ' + now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
+
+            if (currentType === 'out' && appData.balance < amount) {
+                alert('Saldo tidak cukup untuk pengeluaran ini!');
+                return;
+            }
+
+            const newTrx = {
+                id: 'TRX-' + Date.now(),
+                type: currentType,
+                amount: amount,
+                desc: desc,
+                date: dateStr,
+                image: uploadedImageBase64
+            };
+
+            if (currentType === 'in') appData.balance += amount;
+            else appData.balance -= amount;
+
+            appData.transactions.push(newTrx);
+            saveData();
+            
+            closeModal('modal-form');
+            renderApp();
+        }
+
+        function saveData() {
+            try {
+                localStorage.setItem('sakuData', JSON.stringify(appData));
+            } catch (e) {
+                alert('Gagal menyimpan data! Memori penyimpanan browser penuh (terlalu banyak foto berukuran besar). Silakan reset data atau gunakan foto yang lebih kecil.');
+            }
+        }
+
+        // --- 9. BUKTI TRANSAKSI (RECEIPT) ---
+        function openReceipt(id) {
+            const trx = appData.transactions.find(t => t.id === id);
+            if (!trx) return;
+
+            showScreen('receipt');
+            const isIncome = trx.type === 'in';
+            
+            document.getElementById('receipt-title').innerText = trx.desc;
+            document.getElementById('receipt-amount-display').innerText = formatRupiah(trx.amount);
+            document.getElementById('receipt-date-display').innerText = trx.date;
+            document.getElementById('receipt-id').innerText = trx.id;
+            document.getElementById('receipt-time').innerText = trx.date;
+            
+            const iconBox = document.getElementById('receipt-icon');
+            const proofType = document.getElementById('receipt-proof-type');
+            const statusText = document.getElementById('receipt-status');
+
+            if (isIncome) {
+                iconBox.className = 'status-icon status-in';
+                iconBox.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+                proofType.innerText = 'BUKTI DANA MASUK';
+                proofType.style.color = 'var(--primary)';
+                statusText.innerText = 'BERHASIL';
+                statusText.className = 'detail-value text-success';
+            } else {
+                iconBox.className = 'status-icon status-out';
+                iconBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+                proofType.innerText = 'BUKTI PENGELUARAN';
+                proofType.style.color = 'var(--danger)';
+                statusText.innerText = 'BERHASIL';
+                statusText.className = 'detail-value text-danger';
+            }
+
+            const photoContainer = document.getElementById('receipt-photo-container');
+            if (trx.image) {
+                photoContainer.innerHTML = `<img src="${trx.image}" alt="Bukti Transfer">`;
+                photoContainer.style.border = '1px solid var(--border)';
+            } else {
+                photoContainer.innerHTML = `
+                    <i class="fa-regular fa-image" style="font-size: 30px; margin-bottom: 10px;"></i>
+                    <span style="font-size: 12px;">Tidak ada foto yang dilampirkan</span>
+                `;
+                photoContainer.style.border = '1px dashed var(--border)';
+            }
+        }
+
+        // --- JALANKAN SAAT DIBUKA ---
+        renderApp();
+        renderTargets();
+        renderProfile();
     </script>
 </body>
 </html>
