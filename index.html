@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>saku. - Tabungan Pribadi</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
+        /* Font bawaan HP agar tidak perlu internet */
         :root {
             --primary: #1E3A2F;
             --accent: #C9F27A;
@@ -19,9 +17,10 @@
             --border: #E5E7EB;
             --success: #10B981;
             --danger: #EF4444;
+            --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: var(--font); -webkit-tap-highlight-color: transparent; }
 
         body { background-color: #e5e5e5; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
 
@@ -44,16 +43,17 @@
         /* --- Card Saldo --- */
         .balance-card { background-color: var(--primary); border-radius: 20px; padding: 20px; color: white; margin-bottom: 24px; }
         .balance-header { display: flex; justify-content: space-between; align-items: center; color: #D1D5DB; font-size: 14px; }
-        .balance-header i { cursor: pointer; padding: 5px; }
+        .balance-header svg { cursor: pointer; width: 20px; height: 20px; fill: currentColor; }
         .balance-amount { font-size: 32px; font-weight: 700; margin: 8px 0 16px 0; }
         
         .action-buttons { display: flex; gap: 10px; }
         .btn-accent, .btn-outline {
             flex: 1; padding: 14px; border-radius: 12px; border: none; font-size: 14px; font-weight: 700;
-            display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; gap: 8px; cursor: pointer; font-family: var(--font);
         }
         .btn-accent { background-color: var(--accent); color: var(--primary); }
         .btn-outline { background-color: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); }
+        .btn-accent svg, .btn-outline svg { width: 16px; height: 16px; fill: currentColor; }
 
         /* --- List Transaksi --- */
         .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: 10px; }
@@ -65,7 +65,8 @@
             border: 1px solid var(--border); transition: transform 0.1s;
         }
         .trx-item:active { transform: scale(0.98); }
-        .icon-box { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; font-size: 18px; }
+        .icon-box { width: 40px; height: 40px; border-radius: 12px; display: flex; justify-content: center; align-items: center; }
+        .icon-box svg { width: 20px; height: 20px; fill: currentColor; }
         .trx-icon-in { background: var(--accent); color: var(--primary); }
         .trx-icon-out { background: #FEE2E2; color: var(--danger); }
         .card-text { flex: 1; margin-left: 12px; }
@@ -83,9 +84,9 @@
             border-top: 1px solid var(--border); display: flex; justify-content: space-around;
             padding: 12px 0 20px 0; border-radius: 0 0 20px 20px; z-index: 99;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); gap: 4px; cursor: pointer; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 11px; color: var(--text-muted); gap: 4px; cursor: pointer; font-weight:500; }
         .nav-item.active { color: var(--primary); font-weight: 700; }
-        .nav-item i { font-size: 20px; }
+        .nav-item svg { width: 22px; height: 22px; fill: currentColor; }
 
         /* --- Modal Form --- */
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: flex-end; z-index: 1000; }
@@ -95,40 +96,46 @@
         
         .input-group { margin-bottom: 16px; }
         .input-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
-        .input-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); font-size: 16px; font-family: inherit; outline: none; }
+        .input-control { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); font-size: 16px; font-family: var(--font); outline: none; background: var(--surface); color: var(--text-main); }
         .input-control:focus { border-color: var(--primary); }
 
         /* --- Receipt --- */
-        .back-btn { width: 40px; height: 40px; background: var(--surface); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); font-size: 18px; cursor: pointer; margin-bottom: 20px; }
+        .back-btn { width: 40px; height: 40px; background: var(--surface); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 1px solid var(--border); cursor: pointer; margin-bottom: 20px; }
+        .back-btn svg { width: 20px; height: 20px; fill: var(--text-main); }
         .receipt-header { text-align: center; margin-bottom: 20px; }
-        .status-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 40px; margin: 0 auto 16px auto; }
+        .status-icon { width: 80px; height: 80px; border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 16px auto; }
+        .status-icon svg { width: 40px; height: 40px; fill: currentColor; }
         .status-in { background: var(--accent); color: var(--primary); }
         .status-out { background: #FEE2E2; color: var(--danger); }
-        .receipt-amount { font-size: 32px; font-weight: 800; margin: 4px 0; }
+        .receipt-amount { font-size: 32px; font-weight: 800; margin: 4px 0; color: var(--text-main); }
         
         .card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 24px; border: 1px solid var(--border); }
         .detail-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
         .detail-row:last-child { border-bottom: none; }
         .detail-label { color: var(--text-muted); }
-        .detail-value { font-weight: 600; text-align: right; max-width: 60%; }
+        .detail-value { font-weight: 600; text-align: right; max-width: 60%; color: var(--text-main); }
 
         .photo-box { width: 100%; height: auto; min-height: 150px; border-radius: 16px; overflow: hidden; border: 1px dashed var(--primary); background: #E5E7EB; margin-bottom: 24px; display: flex; justify-content: center; align-items: center; color: var(--text-muted); flex-direction: column; padding: 20px; text-align: center;}
         .photo-box img { width: 100%; border-radius: 8px; object-fit: contain; max-height: 300px; }
+        .photo-box svg { width: 40px; height: 40px; fill: currentColor; margin-bottom: 10px; }
         
         /* --- Target Styles --- */
         .target-card { background: var(--surface); border-radius: 16px; padding: 16px; margin-bottom: 16px; border: 1px solid var(--border); }
         .target-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .target-icon { width: 40px; height: 40px; border-radius: 50%; background: #F3F4F6; display: flex; justify-content: center; align-items: center; color: var(--primary); font-size: 18px;}
+        .target-icon { width: 40px; height: 40px; border-radius: 50%; background: #F3F4F6; display: flex; justify-content: center; align-items: center; color: var(--primary); }
+        .target-icon svg { width: 20px; height: 20px; fill: currentColor; }
         .progress-bg { height: 8px; background: var(--border); border-radius: 4px; margin: 10px 0; overflow: hidden; }
         .progress-fill { height: 100%; background: var(--primary); border-radius: 4px; }
         
         /* --- Profile Styles --- */
         .profile-header { text-align: center; margin-bottom: 30px; }
-        .avatar { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px auto; font-size: 32px; color: var(--primary); }
+        .avatar { width: 80px; height: 80px; background: var(--accent); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 12px auto; color: var(--primary); }
+        .avatar svg { width: 40px; height: 40px; fill: currentColor; }
         .profile-menu { background: var(--surface); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
-        .profile-item { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
+        .profile-item { padding: 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; color: var(--text-main); }
         .profile-item:last-child { border-bottom: none; }
         .profile-item:active { background: #F3F4F6; }
+        .profile-item svg { width: 20px; height: 20px; fill: var(--primary); }
     </style>
 </head>
 <body>
@@ -147,16 +154,16 @@
             <div class="balance-card">
                 <div class="balance-header">
                     <span>Saldo Tersedia</span>
-                    <i id="toggle-balance-btn" class="fa-regular fa-eye" onclick="toggleBalance()"></i>
+                    <svg id="toggle-balance-btn" onclick="toggleBalance()" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
                 </div>
                 <div id="total-balance" class="balance-amount">Rp0</div>
                 
                 <div class="action-buttons">
                     <button class="btn-accent" onclick="openModal('in')">
-                        <i class="fa-solid fa-plus"></i> Dana Masuk
+                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> Dana Masuk
                     </button>
                     <button class="btn-outline" onclick="openModal('out')">
-                        <i class="fa-solid fa-minus"></i> Pengeluaran
+                        <svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg> Pengeluaran
                     </button>
                 </div>
             </div>
@@ -177,9 +184,7 @@
                 <button class="btn-accent" style="flex:none; padding: 8px 12px; font-size:12px;" onclick="openTargetModal()">+ Target Baru</button>
             </div>
             
-            <div id="target-list">
-                <!-- Diisi oleh JS -->
-            </div>
+            <div id="target-list"></div>
         </div>
 
         <!-- ================= 3. LAYAR STATISTIK ================= -->
@@ -191,7 +196,7 @@
                     <div style="font-size: 13px; color: var(--text-muted);">Total Dana Masuk</div>
                     <div id="stat-in" style="font-size: 20px; font-weight: 700; color: var(--success);">Rp0</div>
                 </div>
-                <i class="fa-solid fa-arrow-down" style="color: var(--success); font-size: 24px;"></i>
+                <div class="icon-box trx-icon-in"><svg viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg></div>
             </div>
 
             <div class="card" style="border-left: 4px solid var(--danger); display: flex; justify-content: space-between; align-items: center;">
@@ -199,7 +204,7 @@
                     <div style="font-size: 13px; color: var(--text-muted);">Total Pengeluaran</div>
                     <div id="stat-out" style="font-size: 20px; font-weight: 700; color: var(--danger);">Rp0</div>
                 </div>
-                <i class="fa-solid fa-arrow-up" style="color: var(--danger); font-size: 24px;"></i>
+                <div class="icon-box trx-icon-out"><svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg></div>
             </div>
 
             <div class="card" style="background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center;">
@@ -207,7 +212,7 @@
                     <div style="font-size: 13px; color: #D1D5DB;">Sisa Saldo Akhir</div>
                     <div id="stat-balance" style="font-size: 24px; font-weight: 800;">Rp0</div>
                 </div>
-                <i class="fa-solid fa-wallet" style="font-size: 24px; opacity: 0.5;"></i>
+                <div class="icon-box" style="background: rgba(255,255,255,0.2); color:white;"><svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg></div>
             </div>
         </div>
 
@@ -217,7 +222,7 @@
             
             <div class="profile-header">
                 <div class="avatar">
-                    <i class="fa-solid fa-user"></i>
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
                 </div>
                 <h3 id="profile-name">Pengguna saku.</h3>
                 <p id="profile-email" style="font-size: 13px; color: var(--text-muted);">pengguna@email.com</p>
@@ -225,10 +230,10 @@
 
             <div class="profile-menu">
                 <div class="profile-item" onclick="editProfile()">
-                    <i class="fa-solid fa-user-pen" style="color: var(--primary);"></i> Ubah Profil
+                    <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg> Ubah Profil
                 </div>
                 <div class="profile-item" onclick="resetData()" style="color: var(--danger);">
-                    <i class="fa-solid fa-trash"></i> Hapus Semua Data (Mulai dari 0)
+                    <svg viewBox="0 0 24 24" style="fill: var(--danger);"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg> Hapus Semua Data (Mulai dari 0)
                 </div>
             </div>
         </div>
@@ -236,13 +241,11 @@
         <!-- ================= 5. LAYAR BUKTI TRANSAKSI ================= -->
         <div id="screen-receipt" class="screen">
             <div class="back-btn" onclick="showScreen('home')">
-                <i class="fa-solid fa-arrow-left"></i>
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             </div>
 
             <div class="receipt-header">
-                <div id="receipt-icon" class="status-icon status-in">
-                    <i class="fa-solid fa-check"></i>
-                </div>
+                <div id="receipt-icon" class="status-icon status-in"></div>
                 <h3 id="receipt-proof-type" style="color: var(--primary); margin-bottom: 8px;">BUKTI DANA MASUK</h3>
                 <div id="receipt-amount-display" class="receipt-amount">Rp0</div>
                 <div id="receipt-date-display" style="color: var(--text-muted); font-size: 13px;">-</div>
@@ -279,10 +282,18 @@
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
-            <div class="nav-item active" id="nav-home" onclick="showScreen('home')"><i class="fa-solid fa-house"></i>Beranda</div>
-            <div class="nav-item" id="nav-target" onclick="showScreen('target')"><i class="fa-solid fa-bullseye"></i>Target</div>
-            <div class="nav-item" id="nav-stats" onclick="showScreen('stats')"><i class="fa-solid fa-chart-pie"></i>Statistik</div>
-            <div class="nav-item" id="nav-profile" onclick="showScreen('profile')"><i class="fa-regular fa-user"></i>Profil</div>
+            <div class="nav-item active" id="nav-home" onclick="showScreen('home')">
+                <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Beranda
+            </div>
+            <div class="nav-item" id="nav-target" onclick="showScreen('target')">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg> Target
+            </div>
+            <div class="nav-item" id="nav-stats" onclick="showScreen('stats')">
+                <svg viewBox="0 0 24 24"><path d="M11 2v20c-5.07-.5-9-4.79-9-9.95S5.93 2.5 11 2zm2 0v9h9c-.47-4.72-4.28-8.53-9-9zm0 11v9c4.72-.47 8.53-4.28 9-9h-9z"/></svg> Statistik
+            </div>
+            <div class="nav-item" id="nav-profile" onclick="showScreen('profile')">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Profil
+            </div>
         </div>
 
     </div>
@@ -333,10 +344,9 @@
     </div>
 
     <script>
-        // --- 1. INISIALISASI DATA (MULAI DARI 0) ---
-        let appData = JSON.parse(localStorage.getItem('sakuData'));
+        // --- 1. INISIALISASI DATA ---
+        let appData = JSON.parse(localStorage.getItem('sakuDataOffline'));
         
-        // Jika belum ada data sama sekali, set default mulai dari 0
         if (!appData || !appData.transactions) {
             appData = {
                 balance: 0,
@@ -367,7 +377,6 @@
 
             document.querySelector('.app-container').scrollTop = 0;
             
-            // Render ulang data saat pindah tab
             if(screenName === 'stats') renderStats();
             if(screenName === 'target') renderTargets();
             if(screenName === 'profile') renderProfile();
@@ -376,14 +385,11 @@
         function toggleBalance() {
             isBalanceVisible = !isBalanceVisible;
             const balEl = document.getElementById('total-balance');
-            const iconEl = document.getElementById('toggle-balance-btn');
             
             if (isBalanceVisible) {
                 balEl.innerText = formatRupiah(appData.balance);
-                iconEl.className = 'fa-regular fa-eye';
             } else {
                 balEl.innerText = 'Rp ••••••••';
-                iconEl.className = 'fa-regular fa-eye-slash';
             }
         }
 
@@ -402,13 +408,17 @@
             appData.transactions.slice().reverse().forEach(trx => {
                 const isIncome = trx.type === 'in';
                 const iconClass = isIncome ? 'trx-icon-in' : 'trx-icon-out';
-                const iconFa = isIncome ? 'fa-arrow-down' : 'fa-arrow-up';
                 const amountColor = isIncome ? 'text-success' : 'text-danger';
                 const sign = isIncome ? '+' : '-';
+                
+                // SVG Icons
+                const svgIcon = isIncome 
+                    ? '<svg viewBox="0 0 24 24"><path d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/></svg>'
+                    : '<svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>';
 
                 listContainer.innerHTML += `
                     <div class="trx-item" onclick="openReceipt('${trx.id}')">
-                        <div class="icon-box ${iconClass}"><i class="fa-solid ${iconFa}"></i></div>
+                        <div class="icon-box ${iconClass}">${svgIcon}</div>
                         <div class="card-text">
                             <div class="card-title">${trx.desc}</div>
                             <div class="card-sub">${trx.date}</div>
@@ -451,13 +461,13 @@
                     <div class="target-card">
                         <div class="target-header">
                             <div style="display:flex; align-items:center; gap: 12px;">
-                                <div class="target-icon"><i class="fa-solid fa-bullseye"></i></div>
+                                <div class="target-icon"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg></div>
                                 <div>
                                     <div style="font-weight: 700; font-size: 15px;">${t.name}</div>
                                     <div style="font-size: 12px; color: var(--text-muted);">${isDone ? 'Target Tercapai! 🎉' : 'Sedang berjalan'}</div>
                                 </div>
                             </div>
-                            ${!isDone ? `<button style="background:var(--accent); border:none; padding: 6px 10px; border-radius:8px; font-weight:700; cursor:pointer;" onclick="addToTarget(${index})">+ Nabung</button>` : ''}
+                            ${!isDone ? `<button style="background:var(--accent); border:none; padding: 6px 10px; border-radius:8px; font-weight:700; cursor:pointer; font-family:var(--font);" onclick="addToTarget(${index})">+ Nabung</button>` : ''}
                         </div>
                         
                         <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-top:12px;">
@@ -501,7 +511,7 @@
             
             let input = prompt(`Masukkan nominal yang ingin ditabung ke "${trg.name}".\nSisa target: ${formatRupiah(sisaTarget)}\nSaldo Utama Anda: ${formatRupiah(appData.balance)}`);
             
-            if(input === null) return; // Batal
+            if(input === null) return; 
             let amount = parseFloat(input);
 
             if(isNaN(amount) || amount <= 0) {
@@ -517,11 +527,9 @@
                 return;
             }
 
-            // Potong saldo utama, tambah ke target
             appData.balance -= amount;
             trg.collected += amount;
 
-            // Catat sebagai transaksi pengeluaran (uang pindah ke target)
             const now = new Date();
             const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' • ' + now.toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'});
             
@@ -567,7 +575,7 @@
                     targets: [],
                     profile: { name: "Pengguna saku.", email: "pengguna@email.com" }
                 };
-                localStorage.removeItem('sakuData');
+                localStorage.removeItem('sakuDataOffline');
                 renderApp();
                 renderTargets();
                 renderProfile();
@@ -646,9 +654,9 @@
 
         function saveData() {
             try {
-                localStorage.setItem('sakuData', JSON.stringify(appData));
+                localStorage.setItem('sakuDataOffline', JSON.stringify(appData));
             } catch (e) {
-                alert('Gagal menyimpan data! Memori penyimpanan browser penuh (terlalu banyak foto berukuran besar). Silakan reset data atau gunakan foto yang lebih kecil.');
+                alert('Gagal menyimpan data! Memori penyimpanan HP penuh (foto terlalu besar). Gunakan foto yang lebih kecil atau reset data.');
             }
         }
 
@@ -672,14 +680,14 @@
 
             if (isIncome) {
                 iconBox.className = 'status-icon status-in';
-                iconBox.innerHTML = '<i class="fa-solid fa-arrow-down"></i>';
+                iconBox.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
                 proofType.innerText = 'BUKTI DANA MASUK';
                 proofType.style.color = 'var(--primary)';
                 statusText.innerText = 'BERHASIL';
                 statusText.className = 'detail-value text-success';
             } else {
                 iconBox.className = 'status-icon status-out';
-                iconBox.innerHTML = '<i class="fa-solid fa-arrow-up"></i>';
+                iconBox.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>';
                 proofType.innerText = 'BUKTI PENGELUARAN';
                 proofType.style.color = 'var(--danger)';
                 statusText.innerText = 'BERHASIL';
@@ -692,7 +700,7 @@
                 photoContainer.style.border = '1px solid var(--border)';
             } else {
                 photoContainer.innerHTML = `
-                    <i class="fa-regular fa-image" style="font-size: 30px; margin-bottom: 10px;"></i>
+                    <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
                     <span style="font-size: 12px;">Tidak ada foto yang dilampirkan</span>
                 `;
                 photoContainer.style.border = '1px dashed var(--border)';
